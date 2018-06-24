@@ -18,10 +18,10 @@
     "default": {
         "taranis": {
             "hashes": [
-                "sha256:35e30406156c96e86e8e93c0cbfda882ae761063a71919ef3a7796c562aebb14"
+                "sha256:6d2f6cd5d1b81e01b87b2952e3db67fa741ec2dab7999bf2b167daac29fca410"
             ],
             "index": "pypi",
-            "version": "==0.1.5"
+            "version": "==0.1.6"
         }
     },
     "develop": {}
