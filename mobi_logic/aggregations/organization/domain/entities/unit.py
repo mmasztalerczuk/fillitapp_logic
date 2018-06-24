@@ -3,7 +3,7 @@ import uuid
 from functools import singledispatch
 
 from taranis.abstract import DomainEvent, Entity, Factory
-from mobi_logic.aggregations.organization.domain import publish
+from taranis import publish
 from .research_group import ResearchGroupFactory
 
 logger = logging.getLogger(__name__)
