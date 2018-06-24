@@ -1,6 +1,0 @@
-setup.py
-mobi_logic/__init__.py
-mobi_logic.egg-info/PKG-INFO
-mobi_logic.egg-info/SOURCES.txt
-mobi_logic.egg-info/dependency_links.txt
-mobi_logic.egg-info/top_level.txt

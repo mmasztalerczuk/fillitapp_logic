@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 
 setup(
     # Needed to silence warnings (and to be a worthwhile package)
@@ -7,7 +7,7 @@ setup(
     author='Mariusz Masztalerczuk',
     author_email='mariusz@masztalerczuk.com',
     # Needed to actually package something
-    packages=['mobi_logic'],
+    packages=find_packages(exclude=['contrib', 'docs', 'tests']),
     # Needed for dependencies
     # install_requires=['numpy'],
     # *strongly* suggested for sharing
