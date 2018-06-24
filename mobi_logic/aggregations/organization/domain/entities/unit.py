@@ -2,11 +2,9 @@ import logging
 import uuid
 from functools import singledispatch
 
-from abstract.domain_event import DomainEvent
-from abstract.enities import Entity
-from abstract.factory import Factory
+from taranis.abstract import DomainEvent, Entity, Factory
 from mobi_logic.aggregations.organization.domain import publish
-from mobi_logic.aggregations.organization.domain import ResearchGroupFactory
+from .research_group import ResearchGroupFactory
 
 logger = logging.getLogger(__name__)
 

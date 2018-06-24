@@ -1,0 +1,28 @@
+{
+    "_meta": {
+        "hash": {
+            "sha256": "99c238d34541f0feed5b3c626f501cf0a7a0ce17bbe9204b5083ee47da21bc66"
+        },
+        "pipfile-spec": 6,
+        "requires": {
+            "python_version": "3.6"
+        },
+        "sources": [
+            {
+                "name": "pypi",
+                "url": "http://devpi.foo.wtf:47038/mariusz/dev/+simple",
+                "verify_ssl": false
+            }
+        ]
+    },
+    "default": {
+        "taranis": {
+            "hashes": [
+                "sha256:35e30406156c96e86e8e93c0cbfda882ae761063a71919ef3a7796c562aebb14"
+            ],
+            "index": "pypi",
+            "version": "==0.1.5"
+        }
+    },
+    "develop": {}
+}

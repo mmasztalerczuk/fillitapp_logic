@@ -1,9 +1,10 @@
 [[source]]
-url = "https://pypi.org/simple"
-verify_ssl = true
+url = "http://devpi.foo.wtf:47038/mariusz/dev/+simple"
 name = "pypi"
+verify_ssl = false
 
 [packages]
+taranis = "*"
 
 [dev-packages]
 

@@ -1,9 +1,7 @@
 import logging
-
 import uuid
 
-from abstract.enities import Entity
-from abstract.factory import Factory
+from taranis.abstract import Entity, Factory
 
 logger = logging.getLogger(__name__)
 

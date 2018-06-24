@@ -1,4 +1,4 @@
-from mobi_logic.aggregations.organization.domain import UnitFactory
+from .domain.entities.unit import UnitFactory
 
 
 def create_new_unit(name):

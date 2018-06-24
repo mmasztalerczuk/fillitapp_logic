@@ -2,8 +2,7 @@ import logging
 
 import uuid
 
-from abstract.enities import Entity
-from abstract.factory import Factory
+from taranis.abstract import Entity, Factory
 from mobi_logic.aggregations.polls.domain.question import QuestionFactory
 
 logger = logging.getLogger(__name__)
