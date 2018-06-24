@@ -4,7 +4,7 @@ import uuid
 
 from abstract.enities import Entity
 from abstract.factory import Factory
-from aggregations.polls.domain.question import QuestionFactory
+from mobi_logic.aggregations.polls.domain.question import QuestionFactory
 
 logger = logging.getLogger(__name__)
 

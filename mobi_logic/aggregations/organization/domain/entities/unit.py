@@ -5,8 +5,8 @@ from functools import singledispatch
 from abstract.domain_event import DomainEvent
 from abstract.enities import Entity
 from abstract.factory import Factory
-from aggregations.organization.domain import publish
-from aggregations.organization.domain.entities.research_group import ResearchGroupFactory
+from mobi_logic.aggregations.organization.domain import publish
+from mobi_logic.aggregations.organization.domain import ResearchGroupFactory
 
 logger = logging.getLogger(__name__)
 
