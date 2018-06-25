@@ -1,5 +1,4 @@
 from taranis.abstract.repository import Repository
-from ..domain.entities.unit import Unit
 
 
 class UnitRepository(Repository):
@@ -16,12 +15,9 @@ class UnitRepository(Repository):
         data = []
 
         for event in self._persistent_storage.get_all():
-            if isinstance(event, Unit.Created):
-                data.append({'aggregate_id' : str(event.aggregate_id),
-                             'name' : event.name,
-                             'code' : event.code,
-                             'description' : event.description})
-            print(event)
-
-        print("data", data)
+            if event['type'] == "Unit.Created":
+                data.append({'aggregate_id': event['aggregate_id'],
+                             'name': event['name'],
+                             'code': event['code'],
+                             'description': event['description']})
         return data

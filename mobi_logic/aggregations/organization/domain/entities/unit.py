@@ -17,7 +17,7 @@ class Unit(Entity):
     """
 
     class Created(DomainEvent):
-        pass
+        type = "Unit.Created"
 
     class CreatedResearchGroup(DomainEvent):
         pass
