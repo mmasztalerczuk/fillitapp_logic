@@ -84,7 +84,7 @@ class UnitFactory(Factory):
     def build(name):
         logger.debug("Building new unit")
 
-        unit = Unit(uuid.uuid4(), name)
+        unit = Unit(str(uuid.uuid4()), name)
 
         logger.debug("Finished building new unit id: {unit.id}")
         return unit
