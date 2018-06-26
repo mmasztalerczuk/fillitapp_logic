@@ -8,7 +8,9 @@ def test_unit_create_research_group(mocker):
     def publish_mock(event):
         event_store.append(event)
 
-    mocker.patch("mobi_logic.aggregations.organization.domain.entities.unit.publish", publish_mock)
+    mocker.patch("mobi_logic.aggregations.organization"
+                 ".domain.entities.unit.publish",
+                 publish_mock)
 
     # event_store = []
 
@@ -21,7 +23,6 @@ def test_unit_create_research_group(mocker):
 
     unit_id = 1
     unit = UnitRepository(MockRepository()).get(unit_id)
-    research_group = unit.create_research_group("Moja grupa 1")
+    unit.create_research_group("Moja grupa 1")
 
     assert type(event_store[0]) == Unit.CreatedResearchGroup
-    

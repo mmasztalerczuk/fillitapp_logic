@@ -9,6 +9,7 @@ taranis = "*"
 [dev-packages]
 pytest = "*"
 pytest-mock = "*"
+"pytest-flake8" = "*"
 
 [requires]
 python_version = "3.6"

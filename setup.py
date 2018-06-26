@@ -13,7 +13,7 @@ setup(
     # *strongly* suggested for sharing
     version='0.1.8',
     # The license can be anything you like
-    license='MIT',      
+    license='MIT',
     description='Bussiness logic for mobi stats',
     # We will also need a readme eventually (there will be a warning)
     # long_description=open('README.txt').read(),
