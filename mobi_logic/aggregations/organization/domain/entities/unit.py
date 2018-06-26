@@ -4,7 +4,6 @@ from functools import singledispatch
 
 from taranis.abstract import DomainEvent, Entity, Factory
 from taranis import publish
-from .research_group import ResearchGroupFactory
 
 logger = logging.getLogger(__name__)
 
@@ -22,10 +21,8 @@ class Unit(Entity):
     class CreatedResearchGroup(DomainEvent):
         pass
 
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args)
-
+    def configure(self, *args, **kwargs):
+        super().configure(*args)
         if 'code' in kwargs:
             self.code = kwargs['code']
         else:
@@ -43,7 +40,7 @@ class Unit(Entity):
         publish(event)
 
 
-    def create_new_research_group(self, name, code=None, description=None):
+    def create_research_group(self, name, code=None, description=None):
         """
         Creates a new research group. The process of creating a new group requires a name.
         The name will be visible to participants of the study.
@@ -66,11 +63,8 @@ class Unit(Entity):
                                           code=code,
                                           description=description)
 
-        self._apply(event)
         publish(event)
 
-        research_group = ResearchGroupFactory.build(name)
-        return research_group
 
     @singledispatch
     def _when(self, event):

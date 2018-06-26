@@ -1,5 +1,7 @@
 from taranis.abstract.repository import Repository
 
+from mobi_logic.aggregations.organization.domain.entities.unit import Unit
+
 
 class UnitRepository(Repository):
 
@@ -10,6 +12,9 @@ class UnitRepository(Repository):
 
     def put(self, unit):
         self._persistent_storage.append(unit)
+
+    def get(self, id):
+        return self._persistent_storage.get(Unit, id)
 
     def get_all(self):
         data = []
