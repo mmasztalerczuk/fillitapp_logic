@@ -11,7 +11,7 @@ setup(
     # Needed for dependencies
     # install_requires=['numpy'],
     # *strongly* suggested for sharing
-    version='0.1.9',
+    version='0.1.10',
     # The license can be anything you like
     license='MIT',
     description='Bussiness logic for mobi stats',

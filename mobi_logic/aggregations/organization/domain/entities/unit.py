@@ -75,11 +75,13 @@ class UnitFactory(Factory):
     """Unit factory"""
 
     @staticmethod
-    def build(name):
+    def build(data):
         logger.debug("Building new unit")
 
         unit = Unit()
-        unit.configure(str(uuid.uuid4()), name)
+        unit.configure(str(uuid.uuid4()),
+                       name=data['name'],
+                       description=data['description'])
 
         logger.debug("Finished building new unit id: {unit.id}")
         return unit
