@@ -22,7 +22,7 @@ class Unit(Entity):
         pass
 
     def configure(self, *args, **kwargs):
-        super().configure(*args)
+        super().configure()
         if 'code' in kwargs:
             self.code = kwargs['code']
         else:
@@ -33,7 +33,11 @@ class Unit(Entity):
         else:
             self.description = ""
 
+        self.name = kwargs['name']
+        self.user_id = kwargs['user_id']
+
         event = Unit.Created(aggregate_id=self._id,
+                             user_id=self.user_id,
                              name=self.name,
                              code=self.code,
                              description=self.description)
@@ -74,12 +78,11 @@ class Unit(Entity):
 class UnitFactory(Factory):
     """Unit factory"""
 
-    @staticmethod
-    def build(data):
+    def build(self, user_id, data):
         logger.debug("Building new unit")
 
         unit = Unit()
-        unit.configure(str(uuid.uuid4()),
+        unit.configure(user_id=user_id,
                        name=data['name'],
                        description=data['description'])
 
