@@ -1,5 +1,4 @@
 import logging
-import uuid
 from functools import singledispatch
 
 from taranis.abstract import DomainEvent, Entity, Factory
@@ -42,7 +41,6 @@ class Unit(Entity):
                              code=self.code,
                              description=self.description)
         publish(event)
-
 
     def create_research_group(self, name, code=None, description=None):
         """
