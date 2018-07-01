@@ -28,5 +28,5 @@ class UnitRepository(Repository):
                 unit = Unit()
                 for key in event.keys():
                     setattr(unit, key, event[key])
-                data.append(Unit)
+                data.append(unit)
         return data
