@@ -1,5 +1,7 @@
 from taranis.abstract.repository import Repository
 
+from mobi_logic.aggregations.organization.domain.entities.unit import Unit
+
 
 class UnitRepository(Repository):
 
@@ -8,15 +10,23 @@ class UnitRepository(Repository):
         self._user_id = user_id
 
     def get(self, unit_id):
-        return self._persistent_storage.get(self._user_id, unit_id)
+        data = self._persistent_storage.get(self._user_id, unit_id)
+        unit = Unit()
+        del data['type']
+
+        for key in data.keys():
+            setattr(unit, key, data[key])
+
+        return unit
 
     def get_all(self):
         data = []
 
         for event in self._persistent_storage.get_all(self._user_id):
             if event['type'] == "Unit.Created":
-                data.append({'aggregate_id': event['aggregate_id'],
-                             'name': event['name'],
-                             'code': event['code'],
-                             'description': event['description']})
+                del event['type']
+                unit = Unit()
+                for key in event.keys():
+                    setattr(unit, key, event[key])
+                data.append(Unit)
         return data
