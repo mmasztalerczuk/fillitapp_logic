@@ -14,8 +14,7 @@ class UnitRepository(Repository):
         data = []
         events = {}
         for event in self._persistent_storage.get(self._user_id, unit_id):
-            import pprint
-            pprint.pprint("evendt", event)
+            print("evendt", event)
             if event['type'] == "Unit.Created":
                 del event['type']
                 if 'research_groups' not in event:
@@ -28,8 +27,8 @@ class UnitRepository(Repository):
                 events[event['aggregate_id']].research_groups[event['id']] = event
         print("fin")
         #print("here", events)
+        unit = Unit()
         for item in events.values():
-            unit = Unit()
 
             for key in item.keys():
                 if key == "research_groups":
@@ -43,7 +42,7 @@ class UnitRepository(Repository):
                     setattr(unit, key, item[key])
             data.append(unit)
         #print(data)
-        return data
+        return unit
 
     def get_all(self):
         data = []
