@@ -1,6 +1,6 @@
 import logging
-from functools import singledispatch
 
+import uuid
 from taranis.abstract import DomainEvent, Entity, Factory
 from taranis import publish
 
@@ -18,7 +18,7 @@ class Unit(Entity):
         type = "Unit.Created"
 
     class CreatedResearchGroup(DomainEvent):
-        pass
+        type = "Unit.CreatedResearchGroup"
 
     def configure(self, *args, **kwargs):
         super().configure()
@@ -35,7 +35,8 @@ class Unit(Entity):
         self.name = kwargs['name']
         self.user_id = kwargs['user_id']
 
-        event = Unit.Created(aggregate_id=self._id,
+        event = Unit.Created(id=self.id,
+                             aggregate_id=self.id,
                              user_id=self.user_id,
                              name=self.name,
                              code=self.code,
@@ -60,17 +61,13 @@ class Unit(Entity):
         Raises:
             None
         """
-        event = Unit.CreatedResearchGroup(aggregate_id=self._id,
+        event = Unit.CreatedResearchGroup(id=str(uuid.uuid4()),
+                                          aggregate_id=self.id,
                                           name=name,
                                           code=code,
                                           description=description)
 
         publish(event)
-
-
-    @singledispatch
-    def _when(self, event):
-        pass
 
 
 class UnitFactory(Factory):
