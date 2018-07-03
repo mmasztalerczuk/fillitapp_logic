@@ -1,18 +1,31 @@
 import logging
 
 import uuid
+from sqlalchemy import Column, String, Integer
 from taranis.abstract import DomainEvent, Entity, Factory
 from taranis import publish
 
 logger = logging.getLogger(__name__)
+from sqlalchemy.ext.declarative import declarative_base
+
+logger = logging.getLogger(__name__)
 
 
-class Unit(Entity):
+Base = declarative_base()
+
+class Unit(Base):
     """The unit that represents the highest organizational unit in the hierarchy.
 
        He is responsible for the creation of new research groups and is the place that determines
        the researcher's affiliation
     """
+    __tablename__ = 'unit'
+    id = Column(String(80), primary_key=True)
+    aggregate_id = Column(String(80), primary_key=True)
+    user_id = Column(String(80), nullable=False)
+    name = Column(String(120), nullable=False)
+    code = Column(String(120), nullable=False)
+    description = Column(String(120), nullable=False)
 
     class Created(DomainEvent):
         type = "Unit.Created"

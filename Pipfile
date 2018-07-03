@@ -5,6 +5,7 @@ verify_ssl = false
 
 [packages]
 taranis = "*"
+sqlalchemy = "*"
 
 [dev-packages]
 pytest = "*"
