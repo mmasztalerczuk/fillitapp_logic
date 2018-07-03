@@ -5,6 +5,8 @@ from sqlalchemy import Column, String, Integer
 from taranis.abstract import DomainEvent, Entity, Factory
 from taranis import publish
 
+
+
 logger = logging.getLogger(__name__)
 from sqlalchemy.ext.declarative import declarative_base
 
@@ -12,6 +14,7 @@ logger = logging.getLogger(__name__)
 
 
 Base = declarative_base()
+
 
 class Unit(Base):
     """The unit that represents the highest organizational unit in the hierarchy.
@@ -27,6 +30,14 @@ class Unit(Base):
     code = Column(String(120), nullable=False)
     description = Column(String(120), nullable=False)
 
+    def __init__(self, id=None, aggregate_id=None, user_id=None, name=None, code=None, description=None):
+        self.id = id
+        self.aggregate_id = aggregate_id
+        self.user_id = user_id
+        self.name = name
+        self.code = code
+        self.description = description
+
     class Created(DomainEvent):
         type = "Unit.Created"
 
@@ -34,7 +45,7 @@ class Unit(Base):
         type = "Unit.CreatedResearchGroup"
 
     def configure(self, *args, **kwargs):
-        super().configure()
+        self.id = str(uuid.uuid4())
         if 'code' in kwargs:
             self.code = kwargs['code']
         else:
@@ -53,7 +64,8 @@ class Unit(Base):
                              user_id=self.user_id,
                              name=self.name,
                              code=self.code,
-                             description=self.description)
+                             description=self.description,
+                             parent=Unit)
         publish(event)
 
     def create_research_group(self, name, code=None, description=None):
@@ -78,7 +90,8 @@ class Unit(Base):
                                           aggregate_id=self.id,
                                           name=name,
                                           code=code,
-                                          description=description)
+                                          description=description,
+                                          parent=Unit)
 
         publish(event)
 
