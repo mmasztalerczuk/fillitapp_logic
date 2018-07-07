@@ -1,11 +1,12 @@
 import logging
 
 import uuid
-from sqlalchemy import Column, String, Integer
+from sqlalchemy import Column, String, Integer, ForeignKey
+from sqlalchemy.orm import relationship
 from taranis.abstract import DomainEvent, Entity, Factory
 from taranis import publish
 
-
+# from mobi_logic.aggregations.organization.domain.entities.research_group import ResearchGroup
 
 logger = logging.getLogger(__name__)
 from sqlalchemy.ext.declarative import declarative_base
@@ -15,6 +16,18 @@ logger = logging.getLogger(__name__)
 
 Base = declarative_base()
 
+class ResearchGroup(Base):
+
+    class Created(DomainEvent):
+        type = "ResearchGroup.Created"
+
+    __tablename__ = 'research_group'
+    id = Column(String(80), primary_key=True)
+    aggregate_id = Column(String(80), ForeignKey('unit.id'))
+    user_id = Column(String(80), nullable=False)
+    name = Column(String(120), nullable=False)
+    code = Column(String(120), nullable=False)
+    description = Column(String(120), nullable=False)
 
 class Unit(Base):
     """The unit that represents the highest organizational unit in the hierarchy.
@@ -29,6 +42,7 @@ class Unit(Base):
     name = Column(String(120), nullable=False)
     code = Column(String(120), nullable=False)
     description = Column(String(120), nullable=False)
+    research_groups = relationship('ResearchGroup')
 
     def __init__(self, id=None, aggregate_id=None, user_id=None, name=None, code=None, description=None):
         self.id = id
@@ -40,9 +54,6 @@ class Unit(Base):
 
     class Created(DomainEvent):
         type = "Unit.Created"
-
-    class CreatedResearchGroup(DomainEvent):
-        type = "Unit.CreatedResearchGroup"
 
     def configure(self, *args, **kwargs):
         self.id = str(uuid.uuid4())
@@ -68,7 +79,7 @@ class Unit(Base):
                              parent=Unit)
         publish(event)
 
-    def create_research_group(self, name, code=None, description=None):
+    def create_research_group(self, name, code=None, description=None, user_id=None):
         """
         Creates a new research group. The process of creating a new group requires a name.
         The name will be visible to participants of the study.
@@ -86,12 +97,13 @@ class Unit(Base):
         Raises:
             None
         """
-        event = Unit.CreatedResearchGroup(id=str(uuid.uuid4()),
-                                          aggregate_id=self.id,
-                                          name=name,
-                                          code=code,
-                                          description=description,
-                                          parent=Unit)
+        event = ResearchGroup.Created(id=str(uuid.uuid4()),
+                                      aggregate_id=self.id,
+                                      name=name,
+                                      code=code,
+                                      description=description,
+                                      user_id=user_id,
+                                      parent=ResearchGroup)
 
         publish(event)
 
@@ -109,3 +121,7 @@ class UnitFactory(Factory):
 
         logger.debug("Finished building new unit id: {unit.id}")
         return unit
+
+
+Base = declarative_base()
+

@@ -10,9 +10,9 @@ class UnitRepository(Repository):
         self._user_id = user_id
 
     def get(self, unit_id):
-        properties = {'user_id': self._user_id, 'aggregate_id': unit_id}
+        properties = (Unit.user_id == self._user_id, Unit.aggregate_id == unit_id)
         return self._persistent_storage.get(Unit, properties)[0]
 
     def get_all(self):
-        properties = {'user_id': self._user_id}
+        properties = (Unit.user_id == self._user_id,)
         return self._persistent_storage.get(Unit, properties)
