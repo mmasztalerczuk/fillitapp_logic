@@ -79,7 +79,7 @@ class Unit(Base):
                              parent=Unit)
         publish(event)
 
-    def create_research_group(self, name, code=None, description=None, user_id=None):
+    def create_research_group(self, name, code=None, description=None):
         """
         Creates a new research group. The process of creating a new group requires a name.
         The name will be visible to participants of the study.
@@ -102,7 +102,7 @@ class Unit(Base):
                                       name=name,
                                       code=code,
                                       description=description,
-                                      user_id=user_id,
+                                      user_id=self.user_id,
                                       parent=ResearchGroup)
 
         publish(event)

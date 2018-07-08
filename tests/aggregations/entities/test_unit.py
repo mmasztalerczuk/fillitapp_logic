@@ -1,5 +1,4 @@
-from mobi_logic import UnitRepository
-from mobi_logic.aggregations.organization.domain.entities.unit import Unit
+from mobi_logic.aggregations.organization.domain.entities.unit import Unit, ResearchGroup
 
 
 def test_unit_create_research_group(mocker):
@@ -12,17 +11,17 @@ def test_unit_create_research_group(mocker):
                  ".domain.entities.unit.publish",
                  publish_mock)
 
-    # event_store = []
+    name = "Unit name"
+    code = "Code Name"
+    description = "Description Name"
 
-    class MockRepository:
-        def get(self, clazz, id):
-            if clazz == Unit:
-                unit = Unit()
-                unit._id = id
-                return unit
+    unit = Unit()
+    unit.create_research_group(name, code, description)
 
-    unit_id = 1
-    unit = UnitRepository(MockRepository()).get(unit_id)
-    unit.create_research_group("Moja grupa 1")
+    assert 1 == len(event_store)
+    event = event_store[0]
 
-    assert type(event_store[0]) == Unit.CreatedResearchGroup
+    assert ResearchGroup.Created == type(event)
+    assert name == event.name
+    assert code == event.code
+    assert description == event.description
