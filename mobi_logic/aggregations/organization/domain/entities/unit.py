@@ -1,4 +1,6 @@
 import logging
+import random
+import string
 
 import uuid
 from sqlalchemy import Column, String, Integer, ForeignKey
@@ -97,6 +99,9 @@ class Unit(Base):
         Raises:
             None
         """
+        if code is None:
+            code = ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
+
         event = ResearchGroup.Created(id=str(uuid.uuid4()),
                                       aggregate_id=self.id,
                                       name=name,
