@@ -1,16 +1,7 @@
 from mobi_logic.aggregations.organization.domain.entities.unit import Unit, ResearchGroup
 
 
-def test_unit_create_research_group(mocker):
-    event_store = []
-
-    def publish_mock(event):
-        event_store.append(event)
-
-    mocker.patch("mobi_logic.aggregations.organization"
-                 ".domain.entities.unit.publish",
-                 publish_mock)
-
+def test_unit_create_research_group(event_store):
     name = "Unit name"
     code = "Code Name"
     description = "Description Name"
