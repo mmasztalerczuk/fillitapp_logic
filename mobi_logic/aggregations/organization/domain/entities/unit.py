@@ -1,51 +1,21 @@
 import logging
 import random
 import string
-
 import uuid
-from sqlalchemy import Column, String, Integer, ForeignKey
-from sqlalchemy.orm import relationship
-from taranis.abstract import DomainEvent, Entity, Factory
 from taranis import publish
+from taranis.abstract import DomainEvent, Factory
 
-# from mobi_logic.aggregations.organization.domain.entities.research_group import ResearchGroup
-
-logger = logging.getLogger(__name__)
-from sqlalchemy.ext.declarative import declarative_base
+from mobi_logic.aggregations.organization.domain.entities.research_group import ResearchGroup
 
 logger = logging.getLogger(__name__)
 
 
-Base = declarative_base()
-
-class ResearchGroup(Base):
-
-    class Created(DomainEvent):
-        type = "ResearchGroup.Created"
-
-    __tablename__ = 'research_group'
-    id = Column(String(80), primary_key=True)
-    aggregate_id = Column(String(80), ForeignKey('unit.id'))
-    user_id = Column(String(80), nullable=False)
-    name = Column(String(120), nullable=False)
-    code = Column(String(120), nullable=False)
-    description = Column(String(120), nullable=False)
-
-class Unit(Base):
+class Unit():
     """The unit that represents the highest organizational unit in the hierarchy.
 
        He is responsible for the creation of new research groups and is the place that determines
        the researcher's affiliation
     """
-    __tablename__ = 'unit'
-    id = Column(String(80), primary_key=True)
-    aggregate_id = Column(String(80), primary_key=True)
-    user_id = Column(String(80), nullable=False)
-    name = Column(String(120), nullable=False)
-    code = Column(String(120), nullable=False)
-    description = Column(String(120), nullable=False)
-    research_groups = relationship('ResearchGroup')
-
     def __init__(self, id=None, aggregate_id=None, user_id=None, name=None, code=None, description=None):
         self.id = id
         self.aggregate_id = aggregate_id
@@ -77,8 +47,7 @@ class Unit(Base):
                              user_id=self.user_id,
                              name=self.name,
                              code=self.code,
-                             description=self.description,
-                             parent=Unit)
+                             description=self.description)
         publish(event)
 
     def create_research_group(self, name, code=None, description=None):
@@ -126,7 +95,3 @@ class UnitFactory(Factory):
 
         logger.debug("Finished building new unit id: {unit.id}")
         return unit
-
-
-Base = declarative_base()
-
