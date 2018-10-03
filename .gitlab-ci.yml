@@ -4,6 +4,9 @@ stages:
   - deploy
 
 before_script:
+   - apk add gcc
+   - apk add libc-dev
+   - apk add libffi-dev
    - pip install twine
    - python setup.py sdist
 
