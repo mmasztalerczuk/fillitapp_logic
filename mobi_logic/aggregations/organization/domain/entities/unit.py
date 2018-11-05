@@ -50,6 +50,14 @@ class Unit():
                              description=self.description)
         publish(event)
 
+    def add_respondent(self, respondent_id, research_group_id):
+        event = ResearchGroup.AddRespondent(id=str(uuid.uuid4()),
+                                            user_id=respondent_id,
+                                            research_group_id=research_group_id,
+                                            aggregate_id=self.id)
+
+        publish(event)
+
     def create_research_group(self, name, code=None, description=None):
         """
         Creates a new research group. The process of creating a new group requires a name.
