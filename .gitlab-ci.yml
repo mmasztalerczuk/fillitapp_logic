@@ -9,7 +9,7 @@ before_script:
    - apk add libffi-dev
    - pip install twine
    - python setup.py sdist
-
+   - python setup.py version
 deploy_staging:
   stage: deploy
   variables:
@@ -17,5 +17,3 @@ deploy_staging:
     TWINE_PASSWORD: $STAGING_PASSWORD
   script:
     - twine upload --repository-url $PYPRI_REPOSITORY_URL dist/*
-  except:
-    - tags
