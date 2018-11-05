@@ -1,9 +1,6 @@
 from setuptools import setup, find_packages
 import os
-if os.environ.get('CI_COMMIT_TAG'):
-    version = os.environ['CI_COMMIT_TAG']
-else:
-    version = os.environ['CI_JOB_ID']
+import versioneer
 
 setup(
     # Needed to silence warnings (and to be a worthwhile package)
@@ -16,7 +13,8 @@ setup(
     # Needed for dependencies
     # install_requires=['numpy'],
     # *strongly* suggested for sharing
-    version=version,
+    version=versioneer.get_version(),
+    cmdclass=versioneer.get_cmdclass(),
     # The license can be anything you like
     license='MIT',
     description='Bussiness logic for mobi stats',
