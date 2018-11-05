@@ -11,7 +11,7 @@ setup(
     # Needed to actually package jjjsomething
     packages=find_packages(exclude=['contrib', 'docs', 'tests']),
     # Needed for dependencies
-    # install_requires=['numpy'],
+    # install_requires=['versioneer'],
     # *strongly* suggested for sharing
     version=versioneer.get_version(),
     cmdclass=versioneer.get_cmdclass(),
