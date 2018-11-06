@@ -34,6 +34,7 @@ class RespondentFactory(Factory):
         event_id = str(uuid.uuid4())
 
         event = Respondent.Created(id=event_id,
+                                   code=['survey_code'],
                                    device_id=data['device_id'],
                                    aggregate_id=event_id)
 
