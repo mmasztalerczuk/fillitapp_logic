@@ -32,8 +32,7 @@ class RespondentFactory(Factory):
         logger.debug("Building new unit")
 
         event_id = str(uuid.uuid4())
-        import pdb
-        pdb.set_trace()
+
         event = Respondent.Created(id=event_id,
                                    code=data['survey_code'],
                                    device_id=data['device_id'],
