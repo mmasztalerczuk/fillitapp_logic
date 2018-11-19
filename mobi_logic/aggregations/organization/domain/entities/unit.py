@@ -5,6 +5,7 @@ import uuid
 from taranis import publish
 from taranis.abstract import DomainEvent, Factory
 
+from mobi_logic import get_repository
 from mobi_logic.aggregations.organization.domain.entities.research_group import ResearchGroup
 
 logger = logging.getLogger(__name__)
@@ -26,6 +27,16 @@ class Unit():
 
     class Created(DomainEvent):
         type = "Unit.Created"
+
+    def remove_research_group_id(self, research_group_id):
+        ResearchGroupRepository = get_repository('ResearchGroupRepository')
+
+        for rs in self.research_groups:
+            if rs.id == research_group_id:
+                rs.status = 'DELETED'
+                ResearchGroupRepository.save(rs)
+
+        # @TODO throw no founded rs
 
     def configure(self, *args, **kwargs):
         self.id = str(uuid.uuid4())
