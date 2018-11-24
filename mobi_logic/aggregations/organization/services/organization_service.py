@@ -1,4 +1,5 @@
 from mobi_logic import get_repository
+from mobi_logic.aggregations.organization.domain.entities.research_group import ResearchGroup
 from mobi_logic.aggregations.organization.domain.entities.unit import Unit
 
 
@@ -7,7 +8,18 @@ class OrganizationService:
     @staticmethod
     def get_units(user_id):
         UnitRepository = get_repository('UnitRepository')
-        return UnitRepository.get_all_units(user_id)
+        units = UnitRepository.get_all_units(user_id)
+        filtered_units = []
+
+        for unit in units:
+            filtered_research_group = []
+            for rs in unit.research_group:
+                if rs.status != ResearchGroup.STATUS.DELETED:
+                    filtered_research_group.append(rs)
+            unit.research_group = filtered_research_group
+            filtered_units.append(filtered_units)
+
+        return filtered_units
 
     @staticmethod
     def get_research_group(user_id, unit_id, research_group_id):
