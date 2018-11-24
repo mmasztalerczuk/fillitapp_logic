@@ -3,15 +3,16 @@ import random
 import string
 import uuid
 from taranis import publish
-from taranis.abstract import DomainEvent, Factory
+from taranis.abstract import DomainEvent
 
 from mobi_logic import get_repository
 from mobi_logic.aggregations.organization.domain.entities.research_group import ResearchGroup
+from mobi_logic.aggregations.organization.exceptions.errors import ResearchGroupNotFound
 
 logger = logging.getLogger(__name__)
 
 
-class Unit():
+class Unit:
     """The unit that represents the highest organizational unit in the hierarchy.
 
        He is responsible for the creation of new research groups and is the place that determines
@@ -30,13 +31,20 @@ class Unit():
 
     def remove_research_group_id(self, research_group_id):
         ResearchGroupRepository = get_repository('ResearchGroupRepository')
-
         for rs in self.research_groups:
             if rs.id == research_group_id:
                 rs.status = 'DELETED'
                 ResearchGroupRepository.save(rs)
 
         # @TODO throw no founded rs
+
+    def get_research_group(self, research_group_id, deleted=False):
+        for rs in self.research_groups:
+            if rs.id == research_group_id:
+                if not deleted and rs.status != 'DELETED':
+                    return rs
+                raise ResearchGroupNotFound
+            raise ResearchGroupNotFound
 
     def configure(self, *args, **kwargs):
         self.id = str(uuid.uuid4())
@@ -52,14 +60,6 @@ class Unit():
 
         self.name = kwargs['name']
         self.user_id = kwargs['user_id']
-
-        event = Unit.Created(id=self.id,
-                             aggregate_id=self.id,
-                             user_id=self.user_id,
-                             name=self.name,
-                             code=self.code,
-                             description=self.description)
-        publish(event)
 
     def add_respondent(self, respondent_id, research_group_id):
         event = ResearchGroup.AddRespondent(id=str(uuid.uuid4()),
@@ -90,27 +90,17 @@ class Unit():
         if code is None:
             code = ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
 
-        event = ResearchGroup.Created(id=str(uuid.uuid4()),
-                                      aggregate_id=self.id,
-                                      name=name,
-                                      code=code,
-                                      description=description,
-                                      user_id=self.user_id,
-                                      parent=ResearchGroup)
+        ResearchGroupRepository = get_repository('ResearchGroupRepository')
 
-        publish(event)
+        research_group = ResearchGroup()
 
+        research_group.id=str(uuid.uuid4())
+        research_group.aggregate_id=self.id
+        research_group.name=name
+        research_group.code=code
+        research_group.status = ResearchGroup.STATUS.NEW
+        research_group.description=description
+        research_group.user_id=self.user_id
+        research_group.parent=ResearchGroup
 
-class UnitFactory(Factory):
-    """Unit factory"""
-
-    def build(self, user_id, data):
-        logger.debug("Building new unit")
-
-        unit = Unit()
-        unit.configure(user_id=user_id,
-                       name=data['name'],
-                       description=data['description'])
-
-        logger.debug("Finished building new unit id: {unit.id}")
-        return unit
+        ResearchGroupRepository.save(research_group)

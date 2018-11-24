@@ -1,11 +1,18 @@
 import uuid
 from taranis import publish
 from taranis.abstract import DomainEvent
+
+from mobi_logic import get_repository
 from mobi_logic.aggregations.organization.domain.entities.question import Question
 from mobi_logic.aggregations.organization.domain.entities.response import Response
 
 
-class Survey():
+class Survey:
+
+    @property
+    def survey_repository(self):
+        return get_repository('QuestionRepository')
+
     class Created(DomainEvent):
         type = "Survey.Created"
 
@@ -25,4 +32,13 @@ class Survey():
                              aggregate_id=new_question_id)
 
             publish(event)
+
+    def remove_question(self, question_id):
+        for question in self.questions:
+            if question.id == question_id:
+                question.status = 'DELETED'
+                self.survey_repository.save(question)
+                break
+
+        # @TODO throw exception on missing survey
 
