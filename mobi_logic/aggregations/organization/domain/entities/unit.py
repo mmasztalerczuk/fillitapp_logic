@@ -33,7 +33,7 @@ class Unit:
         ResearchGroupRepository = get_repository('ResearchGroupRepository')
         for rs in self.research_groups:
             if rs.id == research_group_id:
-                rs.status = 'DELETED'
+                rs.status = ResearchGroup.STATUS.DELETED
                 ResearchGroupRepository.save(rs)
 
         # @TODO throw no founded rs

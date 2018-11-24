@@ -1,6 +1,6 @@
 from mobi_logic import get_repository
 from mobi_logic.aggregations.organization.domain.entities.research_group import ResearchGroup
-from mobi_logic.aggregations.organization.domain.entities.unit import Unit
+from mobi_logic.aggregations.org    anization.domain.entities.unit import Unit
 
 
 class OrganizationService:
@@ -16,8 +16,8 @@ class OrganizationService:
             for rs in unit.research_group:
                 if rs.status != ResearchGroup.STATUS.DELETED:
                     filtered_research_group.append(rs)
-            unit.research_group = filtered_research_group
-            filtered_units.append(filtered_units)
+            unit.research_groups = filtered_research_group
+            filtered_units.append(unit)
 
         return filtered_units
 
