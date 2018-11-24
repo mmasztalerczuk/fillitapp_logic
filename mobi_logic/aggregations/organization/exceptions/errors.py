@@ -1,0 +1,2 @@
+class ResearchGroupNotFound(Exception):
+    pass

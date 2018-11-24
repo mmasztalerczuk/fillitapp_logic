@@ -1,7 +1,4 @@
-from taranis.abstract.repository import Repository
-
-
-class UnitRepository(Repository):
+class UnitRepository():
 
     def get_research_group(self, unit_id, research_group_id):
         raise NotImplemented
