@@ -41,8 +41,6 @@ class ResearchGroup:
 
         ResearchGroupRepository.save(self)
 
-
-
     def remove_survey(self, survey_id):
         for survey in self.surveys:
             if survey.id == survey_id:

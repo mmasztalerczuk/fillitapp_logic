@@ -41,7 +41,7 @@ class Unit:
     def get_research_group(self, research_group_id, deleted=False):
         for rs in self.research_groups:
             if rs.id == research_group_id:
-                if not deleted and rs.status != 'DELETED':
+                if not deleted and rs.status != ResearchGroup.STATUS.DELETED:
                     return rs
                 raise ResearchGroupNotFound
             raise ResearchGroupNotFound
