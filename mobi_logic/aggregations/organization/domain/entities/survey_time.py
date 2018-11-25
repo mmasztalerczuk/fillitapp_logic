@@ -1,0 +1,2 @@
+class SurveyTime:
+    pass
