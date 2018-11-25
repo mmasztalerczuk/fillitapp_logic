@@ -1,3 +1,4 @@
+import datetime
 import uuid
 from taranis import publish
 from taranis.abstract import DomainEvent
@@ -38,6 +39,21 @@ class ResearchGroup:
 
         if data['status'] and data['status'] == ResearchGroup.STATUS.STARTED:
             self.status = data['status']
+
+        if data.get('startdate'):
+            self.startdate = data.get('startdate')
+
+        if data.get('enddate'):
+            self.enddate = data['enddate']
+
+        if data.get('description'):
+            self.description = data['description']
+
+        if data.get('name'):
+            self.name = data['name']
+
+        if data.get('code'):
+            self.code = data['code']
 
         ResearchGroupRepository.save(self)
 

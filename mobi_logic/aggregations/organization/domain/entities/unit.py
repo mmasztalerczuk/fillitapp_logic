@@ -41,10 +41,11 @@ class Unit:
     def get_research_group(self, research_group_id, deleted=False):
         for rs in self.research_groups:
             if rs.id == research_group_id:
+
                 if not deleted and rs.status != ResearchGroup.STATUS.DELETED:
                     return rs
                 raise ResearchGroupNotFound
-            raise ResearchGroupNotFound
+        raise ResearchGroupNotFound
 
     def configure(self, *args, **kwargs):
         self.id = str(uuid.uuid4())
@@ -87,7 +88,7 @@ class Unit:
         Raises:
             None
         """
-        if code is None:
+        if code is None or len(code) < 1:
             code = ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
 
         ResearchGroupRepository = get_repository('ResearchGroupRepository')
@@ -101,6 +102,7 @@ class Unit:
         research_group.status = ResearchGroup.STATUS.NEW
         research_group.description=description
         research_group.user_id=self.user_id
-        research_group.parent=ResearchGroup
+        research_group.startdate = None
+        research_group.enddate = None
 
         ResearchGroupRepository.save(research_group)
