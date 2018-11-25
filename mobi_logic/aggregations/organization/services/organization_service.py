@@ -1,5 +1,8 @@
 from mobi_logic import get_repository
+from mobi_logic.aggregations.organization.domain.entities.question import Question
 from mobi_logic.aggregations.organization.domain.entities.research_group import ResearchGroup
+from mobi_logic.aggregations.organization.domain.entities.response import Response
+from mobi_logic.aggregations.organization.domain.entities.survey import Survey
 from mobi_logic.aggregations.organization.domain.entities.unit import Unit
 
 
@@ -28,6 +31,49 @@ class OrganizationService:
         return unit.get_research_group(research_group_id)
 
     @staticmethod
+    def get_surveys(user_id, unit_id, research_group_id):
+        UnitRepository = get_repository('UnitRepository')
+        unit = UnitRepository.get_unit(user_id, unit_id)
+        rs = unit.get_research_group(research_group_id)
+
+        filtered_surveys = []
+        for survey in rs.surveys:
+            if survey.status != Survey.STATUS.DELETED:
+                filtered_surveys.append(survey)
+
+        return filtered_surveys
+
+    @staticmethod
+    def get_questions(user_id, unit_id, research_group_id, survey_id):
+        UnitRepository = get_repository('UnitRepository')
+        unit = UnitRepository.get_unit(user_id, unit_id)
+        rs = unit.get_research_group(research_group_id)
+        survey = rs.get_survey(survey_id)
+
+        filtered_questions = []
+
+        for question in survey.questions:
+            if question.status != Question.STATUS.DELETED:
+                filtered_questions.append(question)
+
+        return filtered_questions
+
+    @staticmethod
+    def get_responses(user_id, unit_id, research_group_id, survey_id, question_id):
+        UnitRepository = get_repository('UnitRepository')
+        unit = UnitRepository.get_unit(user_id, unit_id)
+        rs = unit.get_research_group(research_group_id)
+        survey = rs.get_survey(survey_id)
+        question = survey.get_question(question_id)
+        filtered_responses = []
+
+        for response in question.responses:
+            if response.status != Response.STATUS.DELETED:
+                filtered_responses.append(response)
+
+        return filtered_responses
+
+    @staticmethod
     def update_research_group(user_id, unit_id, research_group_id, data):
         UnitRepository = get_repository('UnitRepository')
 
@@ -35,6 +81,42 @@ class OrganizationService:
         rs = unit.get_research_group(research_group_id)
 
         rs.update_values(data)
+
+    @staticmethod
+    def update_survey(user_id, unit_id, research_group_id, survey_id, data):
+        UnitRepository = get_repository('UnitRepository')
+
+        unit = UnitRepository.get_unit(user_id, unit_id)
+        rs = unit.get_research_group(research_group_id)
+
+        survey = rs.get_survey(survey_id)
+
+        survey.update_values(data)
+
+    @staticmethod
+    def update_question(user_id, unit_id, research_group_id, survey_id, question_id, data):
+        UnitRepository = get_repository('UnitRepository')
+
+        unit = UnitRepository.get_unit(user_id, unit_id)
+        rs = unit.get_research_group(research_group_id)
+
+        survey = rs.get_survey(survey_id)
+        question = survey.get_question(question_id)
+
+        question.update_values(data)
+
+    @staticmethod
+    def update_response(user_id, unit_id, research_group_id, survey_id, question_id, response_id, data):
+        UnitRepository = get_repository('UnitRepository')
+
+        unit = UnitRepository.get_unit(user_id, unit_id)
+        rs = unit.get_research_group(research_group_id)
+
+        survey = rs.get_survey(survey_id)
+        question = survey.get_question(question_id)
+        response = question.get_response(response_id)
+
+        response.update_values(data)
 
 
     @staticmethod
@@ -59,3 +141,40 @@ class OrganizationService:
                                    description=data.get('description'))
 
         return unit
+
+    @staticmethod
+    def create_survey(user_id, unit_id, research_group_id, data):
+        UnitRepository = get_repository('UnitRepository')
+
+        unit = UnitRepository.get_unit(user_id, unit_id)
+
+        rs = unit.get_research_group(research_group_id)
+        rs.create_survey(data['name'], description=data.get('description'))
+
+        return unit
+
+    @staticmethod
+    def create_question(user_id, unit_id, research_group_id, survey_id, data):
+        UnitRepository = get_repository('UnitRepository')
+
+        unit = UnitRepository.get_unit(user_id, unit_id)
+
+        rs = unit.get_research_group(research_group_id)
+        survey = rs.get_survey(survey_id)
+        survey.create_question(data['name'], data['type'])
+
+        return unit
+
+    @staticmethod
+    def create_response(user_id, unit_id, research_group_id, survey_id, question_id, data):
+        UnitRepository = get_repository('UnitRepository')
+
+        unit = UnitRepository.get_unit(user_id, unit_id)
+
+        rs = unit.get_research_group(research_group_id)
+        survey = rs.get_survey(survey_id)
+        question = survey.get_question(question_id)
+        question.create_response(data['value'], data['type'])
+
+        return unit
+
