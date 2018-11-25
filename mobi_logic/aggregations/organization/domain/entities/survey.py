@@ -4,6 +4,7 @@ from taranis.abstract import DomainEvent
 
 from mobi_logic import get_repository
 from mobi_logic.aggregations.organization.domain.entities.question import Question
+from mobi_logic.aggregations.organization.domain.entities.survey_time import SurveyTime
 from mobi_logic.aggregations.organization.exceptions.errors import QuestionNotFound
 
 
@@ -35,6 +36,16 @@ class Survey:
         question.status = Question.STATUS.NEW
 
         QuestionRepository.save(question)
+
+    def add_time(self, time):
+        SurveyTimeRepository = get_repository('SurveyTimeRepository')
+        surveyTime = SurveyTime()
+        surveyTime.id = str(uuid.uuid4())
+        surveyTime.time = time
+        surveyTime.survey_id = self.id
+
+        SurveyTimeRepository.save(surveyTime)
+
 
     def get_question(self, question_id, deleted=False):
         for question in self.questions:

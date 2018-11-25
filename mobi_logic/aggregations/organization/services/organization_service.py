@@ -93,6 +93,16 @@ class OrganizationService:
 
         survey.update_values(data)
 
+        SurveyTimeRepository = get_repository('SurveyTimeRepository')
+        if 'time' in data:
+            SurveyTimeRepository.delete_all(survey_id)
+
+        if data.get('time'):
+            SurveyTimeRepository = get_repository('SurveyTimeRepository')
+            SurveyTimeRepository.delete_all(survey_id)
+            for survey_time in data.get('time'):
+                OrganizationService.create_survey_time(user_id, unit_id, research_group_id, survey_id, survey_time)
+
     @staticmethod
     def update_question(user_id, unit_id, research_group_id, survey_id, question_id, data):
         UnitRepository = get_repository('UnitRepository')
@@ -178,3 +188,13 @@ class OrganizationService:
 
         return unit
 
+    @staticmethod
+    def create_survey_time(user_id, unit_id, research_group_id, survey_id, survey_time):
+        UnitRepository = get_repository('UnitRepository')
+
+        unit = UnitRepository.get_unit(user_id, unit_id)
+        rs = unit.get_research_group(research_group_id)
+
+        survey = rs.get_survey(survey_id)
+
+        survey.add_time(survey_time)
