@@ -9,29 +9,35 @@ def remove_research_group(user_id, unit_id, research_group_id):
     unit.remove_research_group_id(research_group_id)
 
 
-def remove_survey(research_group_id, survey_id):
+def remove_survey(user_id, unit_id, research_group_id, survey_id):
     """Remove survey from research group id"""
-    ResearchGroupRepository = get_repository('ResearchGroupRepository')
+    UnitRepository = get_repository('UnitRepository')
 
-    research_group = ResearchGroupRepository.get_research_group(research_group_id)
+    unit = UnitRepository.get_unit(user_id, unit_id)
+    research_group = unit.get_research_group(research_group_id)
 
     research_group.remove_survey(survey_id)
 
 
-def remove_question(survey_id, question_id):
+def remove_question(user_id, unit_id, research_group_id, survey_id, question_id):
     """Remove question from survey"""
-    SurveyRepository = get_repository('SurveyRepository')
+    UnitRepository = get_repository('UnitRepository')
 
-    survey = SurveyRepository.get_survey(survey_id)
+    unit = UnitRepository.get_unit(user_id, unit_id)
+    research_group = unit.get_research_group(research_group_id)
+    survey = research_group.get_survey(survey_id)
 
     survey.remove_question(question_id)
 
 
-def remove_response(question_id, response_id):
+def remove_response(user_id, unit_id, research_group_id, survey_id, question_id, response_id):
     """Remove question from survey"""
-    QuestionRepository = get_repository('QuestionRepository')
+    UnitRepository = get_repository('UnitRepository')
 
-    question = QuestionRepository.get_question(question_id)
+    unit = UnitRepository.get_unit(user_id, unit_id)
+    research_group = unit.get_research_group(research_group_id)
+    survey = research_group.get_survey(survey_id)
+    question = survey.get_question(question_id)
 
     question.remove_response(response_id)
 
