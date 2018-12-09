@@ -90,8 +90,6 @@ class Survey:
 
                 t += one_day
 
-        import pdb
-        pdb.set_trace()
         return l
 
 
