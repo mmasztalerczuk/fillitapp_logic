@@ -39,7 +39,7 @@ def test_remove_survey():
     survey = Survey()
     survey.id = 2
 
-    research_group = ResearchGroup()
+    research_group = ResearchGroup(unit_id=1)
     research_group.id = 1
     research_group.surveys = [survey]
     research_group_repository.save(research_group)

@@ -10,3 +10,9 @@ class QuestionNotFound(Exception):
 class ResponseNotFound(Exception):
     pass
 
+class ResearchGroupCodeExists(Exception):
+    pass
+
+class ResearchGroupDateIncorrect(Exception):
+    pass
+
