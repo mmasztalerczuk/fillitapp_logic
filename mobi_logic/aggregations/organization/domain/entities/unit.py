@@ -1,13 +1,12 @@
+import datetime
 import logging
-import random
-import string
 import uuid
 from taranis import publish
 from taranis.abstract import DomainEvent
 
 from mobi_logic import get_repository
 from mobi_logic.aggregations.organization.domain.entities.research_group import ResearchGroup
-from mobi_logic.aggregations.organization.exceptions.errors import ResearchGroupNotFound
+from mobi_logic.aggregations.organization.exceptions.errors import ResearchGroupNotFound, ResearchGroupCodeExists
 
 logger = logging.getLogger(__name__)
 
@@ -70,6 +69,36 @@ class Unit:
 
         publish(event)
 
+    @staticmethod
+    def get_respondent_question(device_id):
+        RespondentRepository = get_repository('RespondentRepository')
+        QuestionRepository = get_repository('QuestionRepository')
+        SurveyRepository = get_repository('SurveyRepository')
+        AnswerRepository = get_repository('AnswerRepository')
+
+        respondent = RespondentRepository.get_by_device_id(device_id)
+        questions = QuestionRepository.get_started_question_by_code(respondent.code)
+
+        time_now = datetime.datetime.now()
+        timedelta = datetime.timedelta(hours=4)
+
+        ans = []
+        for question in questions:
+            survey = SurveyRepository.get_by_id(question.survey_id)
+            if survey.startdate <= time_now <= survey.enddate:
+                for time in survey.times:
+                    if time.time <= time_now <= time.time + timedelta:
+
+                        answers = AnswerRepository.get_by_question_id_and_device_id(question.id, device_id)
+
+                        for answer in answers:
+                            if time.time <= answer.date <= time.time + timedelta:
+                                break
+                        else:
+                            ans.append(question)
+
+        return ans
+
     def create_research_group(self, name, code=None, description=None):
         """
         Creates a new research group. The process of creating a new group requires a name.
@@ -88,21 +117,21 @@ class Unit:
         Raises:
             None
         """
-        if code is None or len(code) < 1:
-            code = ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
-
         ResearchGroupRepository = get_repository('ResearchGroupRepository')
 
-        research_group = ResearchGroup()
+        research_group = ResearchGroup(unit_id=self.id, code=code)
 
-        research_group.id=str(uuid.uuid4())
-        research_group.aggregate_id=self.id
-        research_group.name=name
-        research_group.code=code
-        research_group.status = ResearchGroup.STATUS.NEW
+        research_group.name = name
+
         research_group.description=description
         research_group.user_id=self.user_id
         research_group.startdate = None
         research_group.enddate = None
 
-        ResearchGroupRepository.save(research_group)
+        try:
+            ResearchGroupRepository.save(research_group)
+        except ResearchGroupCodeExists as e:
+            if not ResearchGroup.is_code_valid(code):
+                raise e
+            research_group.code = ResearchGroup.generate_new_code()
+
