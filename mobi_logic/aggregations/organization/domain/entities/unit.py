@@ -70,6 +70,29 @@ class Unit:
         publish(event)
 
     @staticmethod
+    def get_check_only_minutes(dateA, dateB):
+        if dateA.hour < dateB.hour:
+            return True
+
+        if dateA.hour == dateB.hour and dateA.minute <= dateB.minute:
+            return True
+
+        return False
+
+    @staticmethod
+    def get_check_only_year_months_day(dateA, dateB):
+        if dateA.year < dateB.year:
+            return True
+
+        if dateA.year == dateB.year and dateA.month < dateB.month:
+            return True
+
+        if dateA.year == dateB.year and dateA.month == dateB.month and dateA.day <= dateB.day:
+            return True
+        
+        return False
+
+    @staticmethod
     def get_respondent_question(device_id):
         RespondentRepository = get_repository('RespondentRepository')
         QuestionRepository = get_repository('QuestionRepository')
@@ -87,12 +110,14 @@ class Unit:
             survey = SurveyRepository.get_by_id(question.survey_id)
             if survey.startdate <= time_now <= survey.enddate:
                 for time in survey.times:
-                    if time.time <= time_now <= time.time + timedelta:
-
+                    if Unit.get_check_only_minutes(time.time, time_now) and Unit.get_check_only_minutes(time_now, time.time + timedelta):
                         answers = AnswerRepository.get_by_question_id_and_device_id(question.id, device_id)
 
                         for answer in answers:
-                            if time.time <= answer.date <= time.time + timedelta:
+                            if Unit.get_check_only_minutes(time.time, answer.date) and \
+                                Unit.get_check_only_minutes(answer.date, time.time + timedelta) and \
+                                Unit.get_check_only_year_months_day(time.time, answer.date) and \
+                                Unit.get_check_only_year_months_day(answer.date, time.time + timedelta):
                                 break
                         else:
                             ans.append(question)
