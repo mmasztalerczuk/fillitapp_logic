@@ -1,0 +1,2 @@
+class RespondentAlreadyRegistered(Exception):
+    pass
