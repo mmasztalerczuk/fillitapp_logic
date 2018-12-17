@@ -10,12 +10,13 @@ def test_research_group_remove(mocker):
     get_repository_mock.return_value = repository_mock
 
     survey_id = 1
+    unit_id = 1
     s1, s2, s3 = mocker.Mock(), mocker.Mock(), mocker.Mock()
     s1.id = survey_id
 
     surveys_list = [s1, s2, s3]
 
-    research_group = ResearchGroup()
+    research_group = ResearchGroup(unit_id)
     research_group.surveys = surveys_list
 
     research_group.remove_survey(survey_id)

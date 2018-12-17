@@ -35,6 +35,8 @@ class Respondent:
 
         RespondentRepository.save(respondent)
 
+        return respondent
+
     @staticmethod
     def add_response(question_id, response_id, device_id):
 

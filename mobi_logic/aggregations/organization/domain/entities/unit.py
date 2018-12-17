@@ -89,7 +89,7 @@ class Unit:
 
         if dateA.year == dateB.year and dateA.month == dateB.month and dateA.day <= dateB.day:
             return True
-        
+
         return False
 
     @staticmethod
@@ -99,16 +99,20 @@ class Unit:
         SurveyRepository = get_repository('SurveyRepository')
         AnswerRepository = get_repository('AnswerRepository')
 
-        respondent = RespondentRepository.get_by_device_id(device_id)
-        questions = QuestionRepository.get_started_question_by_code(respondent.code)
+        respondents = RespondentRepository.get_by_device_id(device_id)
+
+        questions = []
+        for respondent in respondents:
+            l = QuestionRepository.get_started_question_by_code(respondent.code)
+            questions += l
 
         time_now = datetime.datetime.now()
-        timedelta = datetime.timedelta(hours=4)
 
         ans = []
         for question in questions:
             survey = SurveyRepository.get_by_id(question.survey_id)
             if survey.startdate <= time_now <= survey.enddate:
+                timedelta = datetime.timedelta(seconds=survey.questionsdelta)
                 for time in survey.times:
                     if Unit.get_check_only_minutes(time.time, time_now) and Unit.get_check_only_minutes(time_now, time.time + timedelta):
                         answers = AnswerRepository.get_by_question_id_and_device_id(question.id, device_id)

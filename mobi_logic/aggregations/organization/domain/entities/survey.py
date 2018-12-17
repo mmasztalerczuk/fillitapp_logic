@@ -69,8 +69,6 @@ class Survey:
         ResponseRepository = get_repository('ResponseRepository')
         RespondentRepository = get_repository('RespondentRepository')
 
-
-
         t = self.startdate
         one_day = timedelta(days=1)
         l = []
@@ -112,5 +110,8 @@ class Survey:
 
         if data.get('name'):
             self.name = data['name']
+
+        if data.get('questiondelta'):
+            self.questiondelta = data['questiondelta']
 
         SurveyRepository.save(self)

@@ -13,7 +13,7 @@ from tests.component_tests.repositories.survey import SurveyRepository
 from tests.component_tests.repositories.unit import UnitRepository
 
 
-def test_remove_research_group():
+def detest_remove_research_group():
     unit_repository = UnitRepository()
     repository = {'UnitRepository': unit_repository,
                   'ResearchGroupRepository': ResearchGroupRepository()}
@@ -30,7 +30,7 @@ def test_remove_research_group():
     assert research_group.status == 'DELETED'
 
 
-def test_remove_survey():
+def detest_remove_survey():
     research_group_repository = ResearchGroupRepository()
     repository = {'ResearchGroupRepository': research_group_repository,
                   'SurveyRepository': SurveyRepository()}
@@ -49,7 +49,7 @@ def test_remove_survey():
     assert survey.status == 'DELETED'
 
 
-def test_remove_question():
+def detest_remove_question():
     question_repository = QuestionRepository()
     survey_repository = SurveyRepository()
     repository = {'QuestionRepository': question_repository,
@@ -69,7 +69,7 @@ def test_remove_question():
     assert question.status == 'DELETED'
 
 
-def test_remove_response():
+def detest_remove_response():
     response_repository = ReponseRepository()
     question_repository = QuestionRepository()
     repository = {'QuestionRepository': question_repository,
