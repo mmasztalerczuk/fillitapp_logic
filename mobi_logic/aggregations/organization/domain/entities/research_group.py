@@ -88,6 +88,7 @@ class ResearchGroup:
         survey.research_group_id = self.id
         survey.unit_id = self.unit_id
         survey.name=name
+        survey.questiondelta = 3600
         survey.status = ResearchGroup.STATUS.NEW
         survey.description=description
         survey.startdate = None
