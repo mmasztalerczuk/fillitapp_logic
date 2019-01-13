@@ -93,13 +93,13 @@ class Unit:
         return False
 
     @staticmethod
-    def get_respondent_question(device_id):
+    def get_respondent_question(userid):
         RespondentRepository = get_repository('RespondentRepository')
         QuestionRepository = get_repository('QuestionRepository')
         SurveyRepository = get_repository('SurveyRepository')
         AnswerRepository = get_repository('AnswerRepository')
 
-        respondents = RespondentRepository.get_by_device_id(device_id)
+        respondents = RespondentRepository.get_by_id(userid)
 
         questions = []
         for respondent in respondents:
@@ -112,16 +112,17 @@ class Unit:
         for question in questions:
             survey = SurveyRepository.get_by_id(question.survey_id)
             if survey.startdate <= time_now <= survey.enddate:
-                timedelta = datetime.timedelta(seconds=survey.questionsdelta)
+                timedelta = datetime.timedelta(seconds=survey.questiondelta)
+
                 for time in survey.times:
                     if Unit.get_check_only_minutes(time.time, time_now) and Unit.get_check_only_minutes(time_now, time.time + timedelta):
-                        answers = AnswerRepository.get_by_question_id_and_device_id(question.id, device_id)
+                        answers = AnswerRepository.get_by_question_id_and_user_id(question.id, userid)
 
                         for answer in answers:
                             if Unit.get_check_only_minutes(time.time, answer.date) and \
                                 Unit.get_check_only_minutes(answer.date, time.time + timedelta) and \
-                                Unit.get_check_only_year_months_day(time.time, answer.date) and \
-                                Unit.get_check_only_year_months_day(answer.date, time.time + timedelta):
+                                Unit.get_check_only_year_months_day(time_now, answer.date) and \
+                                Unit.get_check_only_year_months_day(answer.date, time_now + timedelta):
                                 break
                         else:
                             ans.append(question)

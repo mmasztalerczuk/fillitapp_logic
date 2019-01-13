@@ -38,16 +38,14 @@ class Respondent:
         return respondent
 
     @staticmethod
-    def add_response(question_id, response_id, device_id):
-
-
+    def add_response(question_id, response_id, user_id):
         AnswerRepository = get_repository('AnswerRepository')
         answer = Answer()
 
         answer.id = str(uuid.uuid4())
         answer.response_id = response_id
         answer.question_id = question_id
-        answer.device_id = device_id
+        answer.user_id = user_id
         answer.date = datetime.datetime.now()
 
 

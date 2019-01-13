@@ -1,7 +1,6 @@
 import uuid
 from datetime import timedelta, datetime
 
-from taranis import publish
 from taranis.abstract import DomainEvent
 
 from mobi_logic import get_repository
@@ -47,7 +46,6 @@ class Survey:
 
         SurveyTimeRepository.save(surveyTime)
 
-
     def get_question(self, question_id, deleted=False):
         for question in self.questions:
             if question.id == question_id:
@@ -66,23 +64,23 @@ class Survey:
         # @TODO throw exception on missing survey
 
     def get_responses(self, code):
+
         ResponseRepository = get_repository('ResponseRepository')
         RespondentRepository = get_repository('RespondentRepository')
+        SurveyRepository = get_repository('SurveyRepository')
 
         t = self.startdate
         one_day = timedelta(days=1)
         l = []
-
         for respondent in RespondentRepository.get_by_code(code):
             t = self.startdate
             while t < self.enddate:
                 for time in self.times:
                     start_date = datetime(year=t.year, month=t.month, day=t.day, hour=time.time.hour, minute=time.time.minute)
-                    d = {'date': start_date, 'user-id': respondent.device_id}
-
+                    d = {'date': start_date, 'user-id': respondent.id}
                     for question in self.questions:
                         for answer in question.answers:
-                            if start_date <= answer.date < start_date + timedelta(hours=4) and answer.device_id == respondent.device_id:
+                            if start_date <= answer.date < start_date + timedelta(seconds=self.questiondelta) and answer.user_id == respondent.id:
                                 d[question.id] = ResponseRepository.get_by_id(answer.response_id).value
                     l.append(d)
 
@@ -101,9 +99,8 @@ class Survey:
             self.startdate = datetime(year=data.get('startdate').year, month=data.get('startdate').month, day=data.get('startdate').day)
 
         if data.get('enddate'):
-            self.enddate = datetime(year=data.get('enddate').year, month=data.get('enddate').month, day=data.get('enddate').day)
-
-        # @TODO enddate must be at least one day after startdate
+            self.enddate = datetime(year=data.get('enddate').year, month=data.get('enddate').month, day=data.get('enddate').day) + \
+                           timedelta(hours=23, minutes=59)
 
         if data.get('description'):
             self.description = data['description']
