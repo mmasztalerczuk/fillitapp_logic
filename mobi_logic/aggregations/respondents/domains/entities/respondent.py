@@ -6,6 +6,7 @@ import logging
 
 from mobi_logic import get_repository
 from mobi_logic.aggregations.organization.domain.entities.answer import Answer
+from mobi_logic.aggregations.organization.domain.entities.answer_text import AnswerText
 
 logger = logging.getLogger(__name__)
 
@@ -38,30 +39,32 @@ class Respondent:
         return respondent
 
     @staticmethod
-    def add_response(question_id, response_id, user_id):
+    def add_response(question_id, responses_id, user_id, text=None):
         AnswerRepository = get_repository('AnswerRepository')
-        answer = Answer()
+        AnswerTextRepository = get_repository('AnswerTextRepository')
+        QuestionRepository = get_repository('QuestionRepository')
 
-        answer.id = str(uuid.uuid4())
-        answer.response_id = response_id
-        answer.question_id = question_id
-        answer.user_id = user_id
-        answer.date = datetime.datetime.now()
+        qr = QuestionRepository.get_by_id(question_id)
+        if qr.type == 'text':
+            answer = AnswerText()
 
+            answer.id = str(uuid.uuid4())
+            answer.question_id = question_id
+            answer.user_id = user_id
+            answer.date = datetime.datetime.now()
+            answer.text = text
 
-        AnswerRepository.save(answer)
+            AnswerTextRepository.save(answer)
 
+        else:
+            for response_id in responses_id:
+                answer = Answer()
 
-    # def add_response(self, questions):
-    #     event_id = str(uuid.uuid4())
-    #
-    #     for question in questions:
-    #         event = Respondent.NewResponse(id=event_id,
-    #                                        question_id=question['id'],
-    #                                        response_id=question['response'],
-    #                                        aggregate_id=event_id)
-    #
-    #         publish(event)
+                answer.id = str(uuid.uuid4())
+                answer.response_id = response_id
+                answer.question_id = question_id
+                answer.user_id = user_id
+                answer.date = datetime.datetime.now()
 
-
+                AnswerRepository.save(answer)
 

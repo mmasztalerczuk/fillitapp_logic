@@ -72,8 +72,10 @@ class Survey:
         t = self.startdate
         one_day = timedelta(days=1)
         l = []
+
         for respondent in RespondentRepository.get_by_code(code):
             t = self.startdate
+
             while t < self.enddate:
                 for time in self.times:
                     start_date = datetime(year=t.year, month=t.month, day=t.day, hour=time.time.hour, minute=time.time.minute)
@@ -81,9 +83,16 @@ class Survey:
                     for question in self.questions:
                         for answer in question.answers:
                             if start_date <= answer.date < start_date + timedelta(seconds=self.questiondelta) and answer.user_id == respondent.id:
-                                d[question.id] = ResponseRepository.get_by_id(answer.response_id).value
-                    l.append(d)
+                                if question.id in d:
+                                    d[question.id] += ":" + ResponseRepository.get_by_id(answer.response_id).value
+                                else:
+                                    d[question.id] = ResponseRepository.get_by_id(answer.response_id).value
+                        for answer in question.answers_text:
+                            if start_date <= answer.date < start_date + timedelta(seconds=self.questiondelta) and answer.user_id == respondent.id:
+                                d[question.id] = answer.text
 
+
+                    l.append(d)
                 t += one_day
 
         return l
