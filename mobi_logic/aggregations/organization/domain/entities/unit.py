@@ -99,12 +99,15 @@ class Unit:
         SurveyRepository = get_repository('SurveyRepository')
         AnswerRepository = get_repository('AnswerRepository')
         AnswerTextRepository = get_repository('AnswerTextRepository')
+        RegistrationsRepository = get_repository('RegistrationsRepository')
+        ResearchGroupRepository = get_repository('ResearchGroupRepository')
 
-        respondents = RespondentRepository.get_by_id(userid)
-
+        respondents = RegistrationsRepository.get_by_respondent_id(userid)
         questions = []
+
         for respondent in respondents:
-            l = QuestionRepository.get_started_question_by_code(respondent.code)
+            research_group = ResearchGroupRepository.get_by_id(respondent.research_group_id)
+            l = QuestionRepository.get_started_question_by_code(research_group.code)
             questions += l
 
         time_now = datetime.datetime.now()
