@@ -159,7 +159,7 @@ class OrganizationService:
         unit = UnitRepository.get_unit(user_id, unit_id)
 
         rs = unit.get_research_group(research_group_id)
-        rs.create_survey(data['name'], description=data.get('description'))
+        rs.create_survey(data['name'], description=data.get('description'), )
 
         return unit
 

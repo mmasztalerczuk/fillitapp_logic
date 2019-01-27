@@ -146,3 +146,11 @@ class ResearchGroup:
                 break
 
         # @TODO throw exception on missing survey
+
+    @staticmethod
+    def register_response(respondent_id, code):
+        RegistrationsRepository = get_repository('RegistrationsRepository')
+        ResearchGroupRepository = get_repository('ResearchGroupRepository')
+
+        research_group = ResearchGroupRepository.get_by_code(code)
+        RegistrationsRepository.save(research_group.id, respondent_id)

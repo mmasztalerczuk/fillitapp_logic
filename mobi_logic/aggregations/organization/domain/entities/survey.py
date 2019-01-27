@@ -64,7 +64,8 @@ class Survey:
         # @TODO throw exception on missing survey
 
     def get_responses(self, code):
-
+        ResearchGroupRepository = get_repository('ResearchGroupRepository')
+        RegistrationsRepository = get_repository('RegistrationsRepository')
         ResponseRepository = get_repository('ResponseRepository')
         RespondentRepository = get_repository('RespondentRepository')
         SurveyRepository = get_repository('SurveyRepository')
@@ -73,7 +74,12 @@ class Survey:
         one_day = timedelta(days=1)
         l = []
 
-        for respondent in RespondentRepository.get_by_code(code):
+        research_group = ResearchGroupRepository.get_by_code(code)
+        registrations = RegistrationsRepository.get_by_research_group_id(research_group)
+
+
+        for registration in registrations:
+            respondent = RegistrationsRepository.get_by_respondent_id(registration.respondent_id)
             t = self.startdate
 
             while t < self.enddate:

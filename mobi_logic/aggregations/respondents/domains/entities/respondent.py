@@ -27,12 +27,11 @@ class Respondent:
         return RespondentRepository.get_by_device_id(device_id)
 
     @staticmethod
-    def create_new(device_id, code):
+    def create_new(device_id):
         RespondentRepository = get_repository('RespondentRepository')
 
         respondent = Respondent()
         respondent.device_id = device_id
-        respondent.code = code
 
         RespondentRepository.save(respondent)
 
