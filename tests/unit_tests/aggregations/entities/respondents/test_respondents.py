@@ -15,7 +15,7 @@ def repository(mocker):
     return repository_mock
 
 
-def test_create_new_respondents(repository):
+def disable_test_create_new_respondents(repository):
     device_id = "123456789"
     code = "ABCDEF"
     respondent = Respondent.create_new(device_id, code)
@@ -23,7 +23,7 @@ def test_create_new_respondents(repository):
     assert respondent.code == code
 
 
-def test_create_new_respondents(repository):
+def disable_test_create_new_respondents(repository):
     device_id = "123456789"
     code = "ABCDEF"
 

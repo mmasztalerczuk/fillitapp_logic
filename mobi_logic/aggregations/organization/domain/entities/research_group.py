@@ -21,6 +21,13 @@ class ResearchGroup:
     def generate_new_code():
         return ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
 
+    def new_survey(self):
+        """ Returing only surveys with status NEW"""
+        """TODO check maybe we can do that in query?"""
+        """TODO is filter is iterator?"""
+
+        return filter(lambda survey: survey.status == Survey.STATUS.NEW, self.surveys)
+
     def __init__(self, unit_id: str, code: str = None):
         """ Init of research group class.
 
