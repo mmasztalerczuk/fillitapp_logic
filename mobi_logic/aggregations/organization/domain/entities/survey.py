@@ -75,11 +75,12 @@ class Survey:
         l = []
 
         research_group = ResearchGroupRepository.get_by_code(code)
-        registrations = RegistrationsRepository.get_by_research_group_id(research_group)
+        registrations = RegistrationsRepository.get_by_research_group_id(research_group.id)
 
 
         for registration in registrations:
-            respondent = RegistrationsRepository.get_by_respondent_id(registration.respondent_id)
+            respondent = RegistrationsRepository.get_by_respondent_id(registration.respondent_id)[0]
+
             t = self.startdate
 
             while t < self.enddate:
