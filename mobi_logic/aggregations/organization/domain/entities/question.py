@@ -34,6 +34,8 @@ class Question:
 
         ResponseRepository.save(response)
 
+        return response.id
+
     def get_response(self, response_id, deleted=False):
         for response in self.responses:
             if response.id == response_id:

@@ -184,9 +184,9 @@ class OrganizationService:
         rs = unit.get_research_group(research_group_id)
         survey = rs.get_survey(survey_id)
         question = survey.get_question(question_id)
-        question.create_response(data['value'], data['type'])
+        response_id = question.create_response(data['value'], data['type'])
 
-        return unit
+        return response_id
 
     @staticmethod
     def create_survey_time(user_id, unit_id, research_group_id, survey_id, survey_time):
