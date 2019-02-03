@@ -1,4 +1,5 @@
 from mobi_logic.aggregations.organization.domain.entities.research_group import ResearchGroup
+from mobi_logic.aggregations.organization.domain.entities.survey import Survey
 
 
 def test_research_group_remove(mocker):
@@ -12,6 +13,9 @@ def test_research_group_remove(mocker):
     survey_id = 1
     unit_id = 1
     s1, s2, s3 = mocker.Mock(), mocker.Mock(), mocker.Mock()
+    s1.status = Survey.STATUS.NEW
+    s2.status = Survey.STATUS.DELETED
+    s3.status = Survey.STATUS.STARTED
     s1.id = survey_id
 
     surveys_list = [s1, s2, s3]
@@ -23,3 +27,20 @@ def test_research_group_remove(mocker):
 
     get_repository_mock.assert_called_once_with('SurveyRepository')
     repository_mock.save.assert_called_once_with(s1)
+
+
+def test_research_filter_new(mocker):
+    unit_id = 1
+    rs = ResearchGroup(unit_id)
+
+    s1, s2, s3, s4 = mocker.Mock(), mocker.Mock(), mocker.Mock(), mocker.Mock()
+
+    s1.status = Survey.STATUS.NEW
+    s2.status = Survey.STATUS.DELETED
+    s3.status = Survey.STATUS.STARTED
+    s4.status = Survey.STATUS.NEW
+
+    surveys_list = [s1, s2, s3, s4]
+    rs.surveys = surveys_list
+
+    assert [s1, s4], rs.new_surveys

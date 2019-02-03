@@ -21,6 +21,14 @@ class ResearchGroup:
     def generate_new_code():
         return ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
 
+    @property
+    def new_surveys(self):
+        """ Returing only surveys with status NEW"""
+        """TODO check maybe we can do that in query?"""
+        """TODO is filter is iterator?"""
+
+        return filter(lambda survey: survey.status == Survey.STATUS.NEW, self.surveys)
+
     def __init__(self, unit_id: str, code: str = None):
         """ Init of research group class.
 
@@ -132,20 +140,20 @@ class ResearchGroup:
         if self.startdate is None or self.enddate is None:
             raise ResearchGroupDateIncorrect
 
-        for survey in self.surveys:
+        for survey in self.new_surveys:
             if survey.startdate is None or survey.enddate is None:
                 raise ResearchGroupDateIncorrect
 
         #@ TODO better msg and check range
 
     def remove_survey(self, survey_id):
-        for survey in self.surveys:
+        for survey in self.new_surveys:
             if survey.id == survey_id:
                 survey.status = ResearchGroup.STATUS.DELETED
                 self.survey_repository.save(survey)
                 break
-
-        # @TODO throw exception on missing survey
+        else:
+            raise SurveyNotFound
 
     @staticmethod
     def register_response(respondent_id, code):

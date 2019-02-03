@@ -114,25 +114,15 @@ class Unit:
 
         ans = []
         for question in questions:
-            survey = SurveyRepository.get_by_id(question.survey_id)
-            if survey.startdate <= time_now <= survey.enddate:
-                timedelta = datetime.timedelta(seconds=survey.questiondelta)
+            if question.status != 'deleted':
+                survey = SurveyRepository.get_by_id(question.survey_id)
+                if survey.startdate <= time_now <= survey.enddate:
+                    timedelta = datetime.timedelta(seconds=survey.questiondelta)
 
-                for time in survey.times:
-                    if Unit.get_check_only_minutes(time.time, time_now) and Unit.get_check_only_minutes(time_now, time.time + timedelta):
-                        answers = AnswerRepository.get_by_question_id_and_user_id(question.id, userid)
-                        f_a = True
-                        for answer in answers:
-                            if Unit.get_check_only_minutes(time.time, answer.date) and \
-                                Unit.get_check_only_minutes(answer.date, time.time + timedelta) and \
-                                Unit.get_check_only_year_months_day(time_now, answer.date) and \
-                                Unit.get_check_only_year_months_day(answer.date, time_now + timedelta):
-                                f_a = False
-                                break
-
-                        answers = AnswerTextRepository.get_by_question_id_and_user_id(question.id, userid)
-
-                        if answers:
+                    for time in survey.times:
+                        if Unit.get_check_only_minutes(time.time, time_now) and Unit.get_check_only_minutes(time_now, time.time + timedelta):
+                            answers = AnswerRepository.get_by_question_id_and_user_id(question.id, userid)
+                            f_a = True
                             for answer in answers:
                                 if Unit.get_check_only_minutes(time.time, answer.date) and \
                                     Unit.get_check_only_minutes(answer.date, time.time + timedelta) and \
@@ -140,8 +130,19 @@ class Unit:
                                     Unit.get_check_only_year_months_day(answer.date, time_now + timedelta):
                                     f_a = False
                                     break
-                        if f_a:
-                            ans.append(question)
+
+                            answers = AnswerTextRepository.get_by_question_id_and_user_id(question.id, userid)
+
+                            if answers:
+                                for answer in answers:
+                                    if Unit.get_check_only_minutes(time.time, answer.date) and \
+                                        Unit.get_check_only_minutes(answer.date, time.time + timedelta) and \
+                                        Unit.get_check_only_year_months_day(time_now, answer.date) and \
+                                        Unit.get_check_only_year_months_day(answer.date, time_now + timedelta):
+                                        f_a = False
+                                        break
+                            if f_a:
+                                ans.append(question)
 
         return ans
 
