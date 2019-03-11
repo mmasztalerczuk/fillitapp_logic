@@ -1,6 +1,9 @@
 class ResearchGroupNotFound(Exception):
     pass
 
+class CodeAlreadyExists(Exception):
+    pass
+
 class SurveyNotFound(Exception):
     pass
 
