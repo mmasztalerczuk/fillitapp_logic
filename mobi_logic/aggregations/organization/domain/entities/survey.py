@@ -37,6 +37,8 @@ class Survey:
 
         QuestionRepository.save(question)
 
+        return question
+
     def add_time(self, time):
         SurveyTimeRepository = get_repository('SurveyTimeRepository')
         surveyTime = SurveyTime()

@@ -175,10 +175,7 @@ class Unit:
         research_group.startdate = None
         research_group.enddate = None
 
-        try:
-            ResearchGroupRepository.save(research_group)
-        except ResearchGroupCodeExists as e:
-            if not ResearchGroup.is_code_valid(code):
-                raise e
-            research_group.code = ResearchGroup.generate_new_code()
+        ResearchGroupRepository.save(research_group)
+
+        return research_group
 

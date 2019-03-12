@@ -146,11 +146,11 @@ class OrganizationService:
 
         unit = UnitRepository.get_unit(user_id, unit_id)
 
-        unit.create_research_group(data['name'],
+        research_group = unit.create_research_group(data['name'],
                                    code=data.get('code'),
                                    description=data.get('description'))
 
-        return unit
+        return research_group
 
     @staticmethod
     def create_survey(user_id, unit_id, research_group_id, data):
@@ -159,9 +159,9 @@ class OrganizationService:
         unit = UnitRepository.get_unit(user_id, unit_id)
 
         rs = unit.get_research_group(research_group_id)
-        rs.create_survey(data['name'], description=data.get('description'), )
+        survey = rs.create_survey(data['name'], description=data.get('description'), )
 
-        return unit
+        return survey
 
     @staticmethod
     def create_question(user_id, unit_id, research_group_id, survey_id, data):
@@ -171,9 +171,9 @@ class OrganizationService:
 
         rs = unit.get_research_group(research_group_id)
         survey = rs.get_survey(survey_id)
-        survey.create_question(data['name'], data['type'])
+        question = survey.create_question(data['name'], data['type'])
 
-        return unit
+        return question
 
     @staticmethod
     def create_response(user_id, unit_id, research_group_id, survey_id, question_id, data):

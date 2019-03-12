@@ -104,6 +104,8 @@ class ResearchGroup:
 
         SurveyRepository.save(survey)
 
+        return survey
+
     def get_survey(self, survey_id, deleted=False):
         for survey in self.surveys:
             if survey.id == survey_id:
