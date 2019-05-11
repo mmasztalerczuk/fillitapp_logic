@@ -1,5 +1,8 @@
 from mobi_logic.aggregations.organization.services.research_group_service import remove_survey
 
+from mobi_logic.aggregations.organization.services.research_group_service import \
+    get_research_group_license
+
 
 def test_remove_research_group(mocker):
     package = 'mobi_logic.aggregations.organization.services.research_group_service.get_repository'
@@ -20,3 +23,23 @@ def test_remove_research_group(mocker):
 
     get_repository_mock.assert_called_once_with('UnitRepository')
     unit_mock.get_unit.assert_called_once_with(user_id, unit_id)
+
+
+def test_get_research_group_license(mocker):
+    package = 'mobi_logic.aggregations.organization.services.research_group_service.get_repository'
+    research_group_code = "ABCDEF"
+    license = "my license"
+
+    research_group = mocker.Mock()
+    research_group.license = license
+
+    research_group_repository_mock = mocker.Mock()
+    research_group_repository_mock.get_by_code.return_value = research_group
+
+    get_repository_mock = mocker.patch(package)
+    get_repository_mock.return_value = research_group_repository_mock
+
+    assert get_research_group_license(research_group_code) == license
+
+    get_repository_mock.assert_called_once_with('ResearchGroupRepository')
+    research_group_repository_mock.get_by_code.assert_called_once_with(research_group_code)

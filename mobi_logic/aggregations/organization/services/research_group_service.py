@@ -41,3 +41,10 @@ def remove_response(user_id, unit_id, research_group_id, survey_id, question_id,
 
     question.remove_response(response_id)
 
+
+def get_research_group_license(research_group_code):
+    ResearchGroupRepository = get_repository('ResearchGroupRepository')
+    rs = ResearchGroupRepository.get_by_code(research_group_code)
+    return rs.license
+
+
