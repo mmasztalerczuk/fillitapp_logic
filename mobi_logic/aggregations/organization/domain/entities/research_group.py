@@ -93,6 +93,7 @@ class ResearchGroup:
         survey = Survey()
 
         survey.id=str(uuid.uuid4())
+        survey.ids = None
         survey.research_group_id = self.id
         survey.unit_id = self.unit_id
         survey.name=name
@@ -131,6 +132,9 @@ class ResearchGroup:
 
         if data.get('code'):
             self.code = data['code']
+
+        if data.get('license'):
+            self.license = data['license']
 
         if data.get('status') and data['status'] == ResearchGroup.STATUS.STARTED:
             self.status = data['status']

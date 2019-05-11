@@ -27,6 +27,7 @@ class Question:
         response = Response()
 
         response.id = str(uuid.uuid4())
+        response.ids = None
         response.question_id = self.id
         response.value = value
         response.type = type

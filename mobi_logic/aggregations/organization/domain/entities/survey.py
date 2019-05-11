@@ -29,6 +29,7 @@ class Survey:
         question = Question()
 
         question.id=str(uuid.uuid4())
+        question.ids = None
         question.survey_id = self.id
         question.unit_id = self.unit_id
         question.name=name

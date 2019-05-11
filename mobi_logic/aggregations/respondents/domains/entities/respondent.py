@@ -49,6 +49,7 @@ class Respondent:
 
             answer.id = str(uuid.uuid4())
             answer.question_id = question_id
+            answer.ids = None
             answer.user_id = user_id
             answer.date = datetime.datetime.now()
             answer.text = text
@@ -60,6 +61,7 @@ class Respondent:
                 answer = Answer()
 
                 answer.id = str(uuid.uuid4())
+                answer.ids = None
                 answer.response_id = response_id
                 answer.question_id = question_id
                 answer.user_id = user_id

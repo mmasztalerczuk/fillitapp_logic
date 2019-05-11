@@ -94,6 +94,7 @@ class Unit:
 
     @staticmethod
     def get_respondent_question(userid):
+        logger.debug("Get respondent question")
         RespondentRepository = get_repository('RespondentRepository')
         QuestionRepository = get_repository('QuestionRepository')
         SurveyRepository = get_repository('SurveyRepository')
@@ -171,10 +172,11 @@ class Unit:
         research_group.name = name
 
         research_group.description=description
-        research_group.user_id=self.user_id
+        research_group.user_id= self.user_id
         research_group.startdate = None
         research_group.enddate = None
-
+        research_group.license = None
+        research_group.ids = None
         ResearchGroupRepository.save(research_group)
 
         return research_group

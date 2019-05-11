@@ -40,7 +40,7 @@ class OrganizationService:
         for survey in rs.surveys:
             if survey.status != Survey.STATUS.DELETED:
                 filtered_surveys.append(survey)
-
+        filtered_surveys.sort(key=lambda x: x.ids)
         return filtered_surveys
 
     @staticmethod
@@ -55,7 +55,7 @@ class OrganizationService:
         for question in survey.questions:
             if question.status != Question.STATUS.DELETED:
                 filtered_questions.append(question)
-
+        filtered_questions.sort(key=lambda x: x.ids)
         return filtered_questions
 
     @staticmethod
@@ -70,7 +70,7 @@ class OrganizationService:
         for response in question.responses:
             if response.status != Response.STATUS.DELETED:
                 filtered_responses.append(response)
-
+        filtered_responses.sort(key=lambda x: x.ids)
         return filtered_responses
 
     @staticmethod
