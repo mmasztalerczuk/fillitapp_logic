@@ -27,6 +27,14 @@ class Respondent:
         return RespondentRepository.get_by_device_id(device_id)
 
     @staticmethod
+    def disable_all_by_device_id(device_id):
+        RespondentRepository = get_repository('RespondentRepository')
+        respondents = Respondent.get_by_id(device_id)
+        for r in respondents:
+            r.device_id = None
+            RespondentRepository.save(r)
+
+    @staticmethod
     def create_new(device_id):
         RespondentRepository = get_repository('RespondentRepository')
 
