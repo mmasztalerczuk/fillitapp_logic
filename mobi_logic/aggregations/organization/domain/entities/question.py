@@ -3,7 +3,8 @@ from taranis.abstract import DomainEvent
 
 from mobi_logic import get_repository
 from mobi_logic.aggregations.organization.domain.entities.response import Response
-from mobi_logic.aggregations.organization.exceptions.errors import ResponseNotFound
+from mobi_logic.aggregations.organization.exceptions.errors import ResponseNotFound, \
+    NotValidQuestion
 
 
 class Question:
@@ -66,5 +67,16 @@ class Question:
                 response.status = Response.STATUS.DELETED
                 ResponseRepository.save(response)
                 break
-
         # @TODO throw exception on missing survey
+
+    def validate_question(self):
+        #@ TODO deleted question should not be validated
+        if self.status == 'deleted':
+            return True
+        if self.type == 'text':
+            if len(self.responses) == 0:
+                return True
+        else:
+            if len(self.responses) > 0:
+                return True
+        raise NotValidQuestion

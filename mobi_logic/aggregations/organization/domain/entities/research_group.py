@@ -149,6 +149,8 @@ class ResearchGroup:
         for survey in self.new_surveys:
             if survey.startdate is None or survey.enddate is None:
                 raise ResearchGroupDateIncorrect
+            for question in survey.questions:
+                question.validate_question()
 
         #@ TODO better msg and check range
 

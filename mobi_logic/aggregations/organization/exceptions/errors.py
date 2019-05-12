@@ -13,6 +13,9 @@ class QuestionNotFound(Exception):
 class ResponseNotFound(Exception):
     pass
 
+class NotValidQuestion(Exception):
+    pass
+
 class ResearchGroupCodeExists(Exception):
     pass
 

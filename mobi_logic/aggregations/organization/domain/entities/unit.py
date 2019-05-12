@@ -6,7 +6,7 @@ from taranis.abstract import DomainEvent
 
 from mobi_logic import get_repository
 from mobi_logic.aggregations.organization.domain.entities.research_group import ResearchGroup
-from mobi_logic.aggregations.organization.exceptions.errors import ResearchGroupNotFound, ResearchGroupCodeExists
+from mobi_logic.aggregations.organization.exceptions.errors import ResearchGroupNotFound
 
 logger = logging.getLogger(__name__)
 
@@ -70,7 +70,15 @@ class Unit:
         publish(event)
 
     @staticmethod
-    def get_check_only_minutes(dateA, dateB):
+    def get_check_only_minutes(dateA, dateB, delta=None):
+        if delta is not None:
+            dateC = dateB + delta
+            if dateB.day < dateC.day:
+                return True
+
+        if delta is not None:
+            dateB = dateB + delta
+
         if dateA.hour < dateB.hour:
             return True
 
@@ -121,12 +129,14 @@ class Unit:
                     timedelta = datetime.timedelta(seconds=survey.questiondelta)
 
                     for time in survey.times:
-                        if Unit.get_check_only_minutes(time.time, time_now) and Unit.get_check_only_minutes(time_now, time.time + timedelta):
+                        if Unit.get_check_only_minutes(time.time, time_now) and \
+                                Unit.get_check_only_minutes(time_now, time.time, timedelta):
                             answers = AnswerRepository.get_by_question_id_and_user_id(question.id, userid)
                             f_a = True
                             for answer in answers:
                                 if Unit.get_check_only_minutes(time.time, answer.date) and \
-                                    Unit.get_check_only_minutes(answer.date, time.time + timedelta) and \
+                                    Unit.get_check_only_minutes(answer.date, time.time, timedelta)\
+                                        and \
                                     Unit.get_check_only_year_months_day(time_now, answer.date) and \
                                     Unit.get_check_only_year_months_day(answer.date, time_now + timedelta):
                                     f_a = False
@@ -137,7 +147,8 @@ class Unit:
                             if answers:
                                 for answer in answers:
                                     if Unit.get_check_only_minutes(time.time, answer.date) and \
-                                        Unit.get_check_only_minutes(answer.date, time.time + timedelta) and \
+                                        Unit.get_check_only_minutes(answer.date, time.time,
+                                                                    timedelta) and \
                                         Unit.get_check_only_year_months_day(time_now, answer.date) and \
                                         Unit.get_check_only_year_months_day(answer.date, time_now + timedelta):
                                         f_a = False
