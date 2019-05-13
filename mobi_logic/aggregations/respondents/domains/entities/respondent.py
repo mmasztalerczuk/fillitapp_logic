@@ -51,15 +51,15 @@ class Respondent:
     @staticmethod
     def update(user_id, device_id):
         RespondentRepository = get_repository('RespondentRepository')
-        respondent = RespondentRepository.get_by_id(device_id)
+        respondents = RespondentRepository.get_by_id(device_id)
 
-        if user_id is not None:
-            respondent.id = user_id
+        for r in respondents:
+            if user_id is not None:
+                r.id = user_id
+                r.device_id = device_id
+                RespondentRepository.save(r)
 
-        respondent.device_id = device_id
-        RespondentRepository.save(respondent)
-
-        return respondent
+        return r
 
     @staticmethod
     def add_response(question_id, responses_id, user_id, text=None):
