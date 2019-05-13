@@ -111,7 +111,8 @@ class Unit:
         RegistrationsRepository = get_repository('RegistrationsRepository')
         ResearchGroupRepository = get_repository('ResearchGroupRepository')
 
-        respondents = RegistrationsRepository.get_by_respondent_id(userid)
+        repondent = RespondentRepository.get_by_id(userid)
+        respondents = RegistrationsRepository.get_by_respondent_ids(repondent.ids)
         questions = []
 
         for respondent in respondents:

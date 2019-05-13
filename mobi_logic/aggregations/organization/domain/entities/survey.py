@@ -81,23 +81,25 @@ class Survey:
         registrations = RegistrationsRepository.get_by_research_group_id(research_group.id)
 
         for registration in registrations:
-            respondent = RegistrationsRepository.get_by_respondent_id(registration.respondent_id)[0]
+            respondent = RespondentRepository.get_by_ids(registration.respondent_ids)
 
             t = self.startdate
 
             while t < self.enddate:
                 for time in self.times:
                     start_date = datetime(year=t.year, month=t.month, day=t.day, hour=time.time.hour, minute=time.time.minute)
-                    d = {'date': start_date, 'user-id': respondent.respondent_id}
+                    d = {'date': start_date, 'user-id': respondent.id}
                     for question in self.questions:
                         for answer in question.answers:
-                            if start_date <= answer.date < start_date + timedelta(seconds=self.questiondelta) and answer.user_id == respondent.respondent_id:
+                            if start_date <= answer.date < start_date + timedelta(
+                                    seconds=self.questiondelta) and answer.user_id == respondent.id:
                                 if question.id in d:
                                     d[question.id] += ":" + ResponseRepository.get_by_id(answer.response_id).value
                                 else:
                                     d[question.id] = ResponseRepository.get_by_id(answer.response_id).value
                         for answer in question.answers_text:
-                            if start_date <= answer.date < start_date + timedelta(seconds=self.questiondelta) and answer.user_id == respondent.respondent_id:
+                            if start_date <= answer.date < start_date + timedelta(
+                                    seconds=self.questiondelta) and answer.user_id == respondent.id:
                                 d[question.id] = answer.text
 
 

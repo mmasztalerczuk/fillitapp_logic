@@ -167,6 +167,8 @@ class ResearchGroup:
     def register_response(respondent_id, code):
         RegistrationsRepository = get_repository('RegistrationsRepository')
         ResearchGroupRepository = get_repository('ResearchGroupRepository')
+        RespondentRepository = get_repository('RespondentRepository')
 
         research_group = ResearchGroupRepository.get_by_code(code)
-        RegistrationsRepository.save(research_group.id, respondent_id)
+        respondent = RespondentRepository.get_by_id(respondent_id)
+        RegistrationsRepository.save(research_group.id, respondent.ids)
