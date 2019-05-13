@@ -59,7 +59,6 @@ class Respondent:
                 r.device_id = device_id
                 RespondentRepository.save(r)
 
-        return r
 
     @staticmethod
     def add_response(question_id, responses_id, user_id, text=None):
