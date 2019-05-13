@@ -35,12 +35,28 @@ class Respondent:
             RespondentRepository.save(r)
 
     @staticmethod
-    def create_new(device_id):
+    def create_new(user_id, device_id):
         RespondentRepository = get_repository('RespondentRepository')
 
         respondent = Respondent()
+        if user_id is not None:
+            respondent.id = user_id
         respondent.device_id = device_id
+        respondent.ids = None
 
+        RespondentRepository.save(respondent)
+
+        return respondent
+
+    @staticmethod
+    def update(user_id, device_id):
+        RespondentRepository = get_repository('RespondentRepository')
+        respondent = RespondentRepository.get_by_id(device_id)
+
+        if user_id is not None:
+            respondent.id = user_id
+
+        respondent.device_id = device_id
         RespondentRepository.save(respondent)
 
         return respondent
