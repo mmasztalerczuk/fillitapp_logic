@@ -51,7 +51,7 @@ class Respondent:
     @staticmethod
     def update(user_id, device_id):
         RespondentRepository = get_repository('RespondentRepository')
-        respondents = RespondentRepository.get_by_id(device_id)
+        respondents = RespondentRepository.get_by_device_id(device_id)
 
         for r in respondents:
             if user_id is not None:
