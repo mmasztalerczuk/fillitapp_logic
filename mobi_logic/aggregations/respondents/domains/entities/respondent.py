@@ -22,14 +22,19 @@ class Respondent:
         self.id = str(uuid.uuid4())
 
     @staticmethod
-    def get_by_id(device_id):
+    def get_by_device_id(device_id):
         RespondentRepository = get_repository('RespondentRepository')
         return RespondentRepository.get_by_device_id(device_id)
 
     @staticmethod
+    def get_by_id(_id):
+        RespondentRepository = get_repository('RespondentRepository')
+        return RespondentRepository.get_by_id(_id)
+
+    @staticmethod
     def disable_all_by_device_id(device_id):
         RespondentRepository = get_repository('RespondentRepository')
-        respondents = Respondent.get_by_id(device_id)
+        respondents = Respondent.get_by_device_id(device_id)
         for r in respondents:
             r.device_id = None
             RespondentRepository.save(r)
