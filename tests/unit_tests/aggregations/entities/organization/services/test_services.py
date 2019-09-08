@@ -3,7 +3,6 @@ from mobi_logic.aggregations.organization.services.research_group_service import
 from mobi_logic.aggregations.organization.services.research_group_service import \
     get_research_group_license
 
-
 def test_remove_research_group(mocker):
     package = 'mobi_logic.aggregations.organization.services.research_group_service.get_repository'
     research_group_id = 1

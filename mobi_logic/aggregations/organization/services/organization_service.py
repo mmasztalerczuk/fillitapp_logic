@@ -25,6 +25,18 @@ class OrganizationService:
         return filtered_units
 
     @staticmethod
+    def get_research_groups(user_id, unit_id):
+        UnitRepository = get_repository('UnitRepository')
+        unit = UnitRepository.get_unit(user_id, unit_id)
+        filtered_research_group = []
+
+        for rs in unit.research_groups:
+            if rs.status != ResearchGroup.STATUS.DELETED:
+                filtered_research_group.append(rs)
+
+        return filtered_research_group
+
+    @staticmethod
     def get_research_group(user_id, unit_id, research_group_id):
         UnitRepository = get_repository('UnitRepository')
         unit = UnitRepository.get_unit(user_id, unit_id)
